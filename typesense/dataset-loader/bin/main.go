@@ -4,19 +4,18 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"log"
+	"os"
 	"sync"
 	"sync/atomic"
 
-	"github.com/loqu-data/data-pipeline/typesense/converter/models"
-	"github.com/loqu-data/data-pipeline/typesense/converter/utils"
+	"github.com/loqudata/data-pipeline/typesense/dataset-loader/models"
+	"github.com/loqudata/data-pipeline/typesense/dataset-loader/utils"
 
 	"github.com/typesense/typesense-go/typesense"
 	"github.com/typesense/typesense-go/typesense/api"
 )
 
 const CONCURRENCY = 5 // Total number of threads to use, excluding the main() thread
-
-const DATA_DIR = "/mnt/data/dbnomics/datasets"
 
 func readDataset(file string) (*models.Dataset, error) {
 	body, err := ioutil.ReadFile(file)
@@ -93,7 +92,7 @@ func convertAndSubmitDataset(file string) error {
 	}
 	out := convertDataset(ds)
 	client := typesense.NewClient(
-		typesense.WithServer("http://localhost:8108"),
+		typesense.WithServer(utils.Getenv("TYPESENSE_SERVER_ADDR", "http://localhost:8108")),
 		typesense.WithAPIKey("aaeff9df"))
 
 	err = submitDataset(out, client)
@@ -101,7 +100,7 @@ func convertAndSubmitDataset(file string) error {
 		return err
 	}
 
-	log.Println("Submitted dataset", out.Code)
+	// log.Println("Submitted dataset", out.Code)
 	return nil
 }
 
@@ -111,7 +110,7 @@ func main() {
 	// Let's just use the glob function to get all JSON files
 	// 40 bytes * 22 000 datasets = 880 kilobytes of filenames in memory: no Problem
 
-	matches, _ := utils.Glob(DATA_DIR, ".json")
+	matches, _ := utils.Glob(os.Getenv("DBNOMICS_DATA_DIR"), ".json")
 
 	// Set up concurrency
 	var ch = make(chan string) // This number 50 can be anything as long as it's larger than xthreads
