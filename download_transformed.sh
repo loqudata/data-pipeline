@@ -5,4 +5,4 @@
 DBNOMICS_DATA_DIR="${DBNOMICS_DATA_DIR:-"$HOME/dbnomics_data"}"
 
 mkdir $DBNOMICS_DATA_DIR
-rclone copy :gcs:static.loqudata.org $DBNOMICS_DATA_DIR
+rclone copy :gcs:static.loqudata.org $DBNOMICS_DATA_DIR --gcs-anonymous -v
