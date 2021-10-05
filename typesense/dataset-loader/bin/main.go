@@ -93,7 +93,7 @@ func convertAndSubmitDataset(file string) error {
 	out := convertDataset(ds)
 	client := typesense.NewClient(
 		typesense.WithServer(utils.Getenv("TYPESENSE_SERVER_ADDR", "http://localhost:8108")),
-		typesense.WithAPIKey("aaeff9df"))
+		typesense.WithAPIKey(os.Getenv("TYPESENSE_API_KEY")))
 
 	err = submitDataset(out, client)
 	if err != nil {

@@ -10,7 +10,7 @@ services:
     # See https://github.com/tenforce/docker-virtuoso/blob/master/virtuoso.ini
     volumes:
       - ${VIRTUOSO_DIR}:/data
-      - ${LOAD_DIR}:/staging/source_data
+      - ${DBNOMICS_DATA_DIR}:/staging/source_data
       - ${LINK_DIR}:/staging/links
       - ./:/scripts
     ports:
