@@ -12,10 +12,12 @@ Follow the steps below to get the source data and create a Loqu backend:
 
 - Download and transform the source data from DBNomics
   - Download the data with `./scraper/main.go` as `.json` files
-  - Run `./converter/run.mjs` to convert to JSON-LD
-  - Run `./jsonld2nt/main.go` to convert to N-Triples
+  - Run `node ./converter/run.mjs` to convert to JSON-LD
+  - Run `go run ./jsonld2nt/main.go` to convert to N-Triples
   - (optional) validate a subset of your data using the Data Cube integrity constraints with `run.sh` in `integrity-constraints`
 - Run `docker-compose up` to start the backend. Make sure you have a `.env` file that sets the required variables (eg location of data from previous step)
+- Load data into the search engine
+  - `DBNOMICS_DATA_DIR=<your path> go run ./typesense/dataset-loader/bin/main.go`
 - Load data into the database
   - Docker exec into Virtuoso database and run `/scripts/load.sh`
 - Create links between concepts
