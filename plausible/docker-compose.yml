@@ -2,7 +2,7 @@ version: "3.7"
 services:
   mail:
     image: bytemark/smtp
-    restart: always
+    # restart: always
 
   plausible_db:
     image: postgres:12
