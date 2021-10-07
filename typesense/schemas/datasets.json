@@ -12,8 +12,7 @@
         },
         {
             "name": "code",
-            "type": "string",
-            "facet": true
+            "type": "string"
         },
         {
             "name": "provider_name",

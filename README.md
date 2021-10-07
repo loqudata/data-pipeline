@@ -6,6 +6,14 @@ This repository downloads, converts, and loads metadata from DBNomics into the g
 
 The `docker-compose.yml` file has all of the services required to serve the Loqu backend: Virtuoso, LIMES, TypeSense, the Loqu API container (which you should build from that repository), and a simple reverse proxy that loadbalances requests to the Search and API services via the Host header.
 
+## Requirements
+
+- Docker
+- Docker Compose
+- httpie, for configuring Typesense
+- Rclone (for downloading or uploading transformed data), maybe replace with gsutil
+- Go and NodeJS, for the transformation scripts (think about containerizing)
+
 ## Pipeline steps
 
 Follow the steps below to get the source data and create a Loqu backend:
@@ -17,6 +25,7 @@ Follow the steps below to get the source data and create a Loqu backend:
   - (optional) validate a subset of your data using the Data Cube integrity constraints with `run.sh` in `integrity-constraints`
 - Run `docker-compose up` to start the backend. Make sure you have a `.env` file that sets the required variables (eg location of data from previous step)
 - Load data into the search engine
+  - `./typesense/dataset-loader/schemas/mk_collections.sh`
   - `DBNOMICS_DATA_DIR=<your path> go run ./typesense/dataset-loader/bin/main.go`
 - Load data into the database
   - Docker exec into Virtuoso database and run `/scripts/load.sh`
